@@ -3,6 +3,7 @@ from rest_framework import views
 from butter_knife.main import get_schemes, get_scheme_data
 from rest_framework.response import Response
 from rest_framework import status
+from utils.db.update_schemes import main
 
 # Create your views here.
 
@@ -18,6 +19,7 @@ class SchemeView(views.APIView):
         schemes = get_schemes()
         test_scheme = list(schemes.values())[0]
         scheme_data = get_scheme_data(test_scheme)
+        main()
         data["name"] = scheme_data["en"]["name"]
         data["interest_rate"] = scheme_data["en"]["interest_rate"]
         data["income_limit"] = scheme_data["en"]["income_limit"]
