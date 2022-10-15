@@ -58,6 +58,8 @@ urllib3 = "==1.26.12"
 virtualenv = "==20.16.5"
 virtualenv-clone = "==0.5.7"
 whitenoise = "==6.2.0"
+gensim = "*"
+nltk = "*"
 
 [dev-packages]
 
