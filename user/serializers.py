@@ -8,9 +8,8 @@ class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=68, min_length=6, write_only=True)
     class Meta:
         model = User
-        fields = ['id','email','username','password','first_name', 'last_name','dob','gender','income','marital_status','caste','educational_qualifications','district','phone_no']
+        fields = ['id','username','password','first_name', 'last_name','dob','gender','income','marital_status','caste','educational_qualifications','district','phone_no']
     def validate(self, attrs):
-        email = attrs.get('email', '')
         username = attrs.get('username', '')
         if not username.isalnum():
             raise serializers.ValidationError(
@@ -41,7 +40,6 @@ class LoginSerializer(serializers.ModelSerializer):
         if not user.is_active:
             raise AuthenticationFailed('Account disabled, contact admin')
         return {
-            'email': user.email,
             'username': user.username,
             'tokens': user.tokens
         }

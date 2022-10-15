@@ -27,7 +27,6 @@ class User(AbstractUser):
         ('Schooling', 'In School'),
     )
     
-    email = models.EmailField(max_length=255, unique=True, db_index=True)
     first_name = models.CharField(max_length=255, null=True, blank= False)
     last_name = models.CharField(max_length=255, null=True, blank= False)
     otp = models.CharField(max_length=100, null= True, blank= False)
