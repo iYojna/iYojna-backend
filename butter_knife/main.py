@@ -114,7 +114,11 @@ def append_csv(scheme_link):
 
     with open('bullets.csv', 'a', newline="") as f:
         writer_obj = writer(f)
-        writer_obj.writerow([scheme_name, " ".join(all_data)])
+        writer_obj.writerow([scheme_name,
+                             " ".join(all_data),
+                             scheme_data["en"]["income_limit"],
+                             scheme_data["en"]["interest_rate"],
+                             scheme_data["link"]])
 
     return scheme_name
 
@@ -122,7 +126,7 @@ def append_csv(scheme_link):
 def generate_csv(schemes):
     with open('bullets.csv', 'w', newline="") as f:
         writer_obj = writer(f)
-        writer_obj.writerow(["Name", "Bullets"])
+        writer_obj.writerow(["Name", "Raw Description", "Income Limit", "Interest Rate", "Link"])
 
     for scheme in schemes.values():
         print(append_csv(scheme))
@@ -143,6 +147,6 @@ def _translate_data(data):
 if __name__ == '__main__':
     schemes = get_schemes()
     test_scheme = list(schemes.values())[0]
-    scheme_data = get_scheme_data(test_scheme)
-    print(scheme_data)
-    # generate_csv(schemes)
+    # scheme_data = get_scheme_data(test_scheme)
+    # print(scheme_data)
+    generate_csv(schemes)
