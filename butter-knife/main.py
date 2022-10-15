@@ -1,7 +1,9 @@
 import json
 import os
 import re
+import time
 
+import httpcore
 from bs4 import BeautifulSoup as soup
 from googletrans import Translator
 import requests
@@ -65,6 +67,25 @@ def get_scheme_data(scheme_link):
         scheme_data["gu"]["income_limit"] = scheme_income
         scheme_data["en"]["income_limit"] = _translate_data(scheme_income)
 
+    curr_ele = scheme_div.find("h6")
+    curr_head = ""
+    translated_head = ""
+    while curr_ele:
+        try:
+            if curr_ele.name == "h6":
+                curr_head = curr_ele.text
+                translated_head = _translate_data(curr_head)
+                scheme_data["gu"]["extra_data"][curr_head] = []
+                scheme_data["en"]["extra_data"][translated_head] = []
+            elif curr_ele != "\n":
+                scheme_data["gu"]["extra_data"][curr_head].append(curr_ele.text)
+                scheme_data["en"]["extra_data"][translated_head].append(_translate_data(curr_ele.text))
+
+            curr_ele = curr_ele.nextSibling
+        except httpcore._exceptions.ReadTimeout:
+            print("Timed Out. Waiting for 5 seconds")
+            time.sleep(5)
+
     scheme_data["link"] = scheme_link
 
     return scheme_data
@@ -75,6 +96,7 @@ def _translate_data(data):
     return translated_data.text
 
 
-schemes = get_schemes()
-test_scheme = list(schemes.values())[0]
-scheme_data = get_scheme_data(test_scheme)
+if __name__ == '__main__':
+    schemes = get_schemes()
+    test_scheme = list(schemes.values())[0]
+    scheme_data = get_scheme_data(test_scheme)
