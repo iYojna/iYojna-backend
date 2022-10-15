@@ -280,4 +280,4 @@ $RECYCLE.BIN/
 db.sqlite3
 
 .env
-butter-knife/*.csv
+butter_knife/*.csv
