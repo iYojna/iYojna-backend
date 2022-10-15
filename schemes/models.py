@@ -7,7 +7,7 @@ class EnglishSchemeModel(models.Model):
     desc = models.TextField(null=True, blank=True)
     income_limit = models.TextField(null=True, blank=True)
     interest_rate = models.TextField(null=True, blank=True)
-    extra_data = models.TextField(null=True, blank=True)
+    # extra_data = models.TextField(null=True, blank=True)
     caste = models.CharField(max_length=255, null=True, blank=True)
     religion = models.CharField(max_length=255, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
@@ -18,14 +18,24 @@ class EnglishSchemeModel(models.Model):
     eduaction = models.CharField(max_length=255, null=True, blank=True)
     occuptaion = models.CharField(max_length=255, null=True, blank=True)
     disability = models.CharField(max_length=255, null=True, blank=True)
+    tags = models.TextField(null=True, blank=True)
 
+
+# class EnglishTagModel(models.Model):
+#     name = models.CharField(max_length=255)
+#     scheme = models.ManyToManyField(EnglishSchemeModel)
+    
+# class GujTagModel(models.Model):
+#     name = models.CharField(max_length=255)
+#     scheme = models.ManyToManyField(EnglishSchemeModel)
+    
 
 class GujSchemeModel(models.Model):
     name = models.CharField(max_length=500, null=False, blank=False)
     desc = models.TextField(null=True, blank=True)
     income = models.TextField(null=True, blank=True)
     interest_rate = models.TextField(null=True, blank=True)
-    extra_data = models.TextField(null=True, blank=True)
+    # extra_data = models.TextField(null=True, blank=True)
     caste = models.CharField(max_length=255, null=True, blank=True)
     religion = models.CharField(max_length=255, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
@@ -36,3 +46,4 @@ class GujSchemeModel(models.Model):
     eduaction = models.CharField(max_length=255, null=True, blank=True)
     occuptaion = models.CharField(max_length=255, null=True, blank=True)
     disability = models.CharField(max_length=255, null=True, blank=True)
+    tags = models.TextField(null=True, blank=True)
