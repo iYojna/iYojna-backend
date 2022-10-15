@@ -72,50 +72,53 @@ def get_scheme_data(scheme_link):
     curr_head = ""
     translated_head = ""
     while curr_ele:
-        try:
-            if curr_ele.name == "h6":
-                curr_head = curr_ele.text
-                translated_head = _translate_data(curr_head)
-                scheme_data["gu"]["extra_data"][curr_head] = []
-                scheme_data["en"]["extra_data"][translated_head] = []
-            elif curr_ele != "\n":
-                scheme_data["gu"]["extra_data"][curr_head].append(curr_ele.text)
-                scheme_data["en"]["extra_data"][translated_head].append(_translate_data(curr_ele.text))
+        if curr_ele.name == "h6":
+            curr_head = curr_ele.text
+            translated_head = _translate_data(curr_head)
+            scheme_data["gu"]["extra_data"][curr_head] = []
+            scheme_data["en"]["extra_data"][translated_head] = []
+        elif curr_ele != "\n":
+            scheme_data["gu"]["extra_data"][curr_head].append(curr_ele.text)
+            scheme_data["en"]["extra_data"][translated_head].append(_translate_data(curr_ele.text))
 
-            curr_ele = curr_ele.nextSibling
-        except httpcore._exceptions.ReadTimeout:
-            print("Timed Out. Waiting for 5 seconds")
-            time.sleep(5)
+        curr_ele = curr_ele.nextSibling
 
     scheme_data["link"] = scheme_link
 
     return scheme_data
 
 
+def get_all_schemes():
+    schemes = get_schemes()
+    for scheme_link in schemes.values():
+        scheme_data = get_scheme_data(scheme_link)
+        yield scheme_data
+
+
 def append_csv(scheme_link):
-    response = requests.get(scheme_link)
-
-    res_soup = soup(response.content, "html.parser")
-    scheme_div = res_soup.find("div", {"class": "parishisht"})
-
-    scheme_name = scheme_div.find("h2").text
-    scheme_name = scheme_name.split(":")[-1]
-    scheme_name = _translate_data(scheme_name)
-
-    items = scheme_div.find_all("li")
-    items = [item.text for item in items]
+    scheme_data = get_scheme_data(scheme_link)
+    scheme_name = scheme_data["en"]["name"]
 
     all_data = []
-    translated_data = []
+
+    for data in scheme_data["en"]["extra_data"].values():
+        processed_data = []
+
+        for item in data:
+            if item.strip():
+                item = item.strip()
+                item = re.sub(r"[ \n\t]+", " ", item)
+                processed_data.append(item)
+
+        all_data.extend(processed_data)
 
     with open('bullets.csv', 'a', newline="") as f:
         writer_obj = writer(f)
-        for item in items:
-            if item.strip():
-                all_data.append(item)
-                translated_data.append(_translate_data(item))
-
-        writer_obj.writerow([scheme_name, " ".join(translated_data)])
+        writer_obj.writerow([scheme_name,
+                             " ".join(all_data),
+                             scheme_data["en"]["income_limit"],
+                             scheme_data["en"]["interest_rate"],
+                             scheme_data["link"]])
 
     return scheme_name
 
@@ -123,14 +126,21 @@ def append_csv(scheme_link):
 def generate_csv(schemes):
     with open('bullets.csv', 'w', newline="") as f:
         writer_obj = writer(f)
-        writer_obj.writerow(["Name", "Bullets"])
+        writer_obj.writerow(["Name", "Raw Description", "Income Limit", "Interest Rate", "Link"])
 
     for scheme in schemes.values():
         print(append_csv(scheme))
 
 
 def _translate_data(data):
-    translated_data = translator.translate(data, dest="en")
+    translated_data = None
+    while not translated_data:
+        try:
+            translated_data = translator.translate(data, dest="en")
+        except httpcore._exceptions.ReadTimeout:
+            print("Timed Out. Waiting for 5 seconds")
+            time.sleep(5)
+
     return translated_data.text
 
 
@@ -138,4 +148,5 @@ if __name__ == '__main__':
     schemes = get_schemes()
     test_scheme = list(schemes.values())[0]
     # scheme_data = get_scheme_data(test_scheme)
+    # print(scheme_data)
     generate_csv(schemes)
