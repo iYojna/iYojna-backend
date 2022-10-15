@@ -143,5 +143,6 @@ def _translate_data(data):
 if __name__ == '__main__':
     schemes = get_schemes()
     test_scheme = list(schemes.values())[0]
-    # scheme_data = get_scheme_data(test_scheme)
-    generate_csv(schemes)
+    scheme_data = get_scheme_data(test_scheme)
+    print(scheme_data)
+    # generate_csv(schemes)
