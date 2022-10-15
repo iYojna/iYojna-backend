@@ -30,7 +30,7 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=255, null=True, blank= False)
     last_name = models.CharField(max_length=255, null=True, blank= False)
     otp = models.CharField(max_length=100, null= True, blank= False)
-    dob = models.DateField(default=datetime.date.today)
+    dob = models.DateField(auto_now_add=True)
     gender = models.CharField(max_length=9,choices=TYPE,default="Female")
     income = models.IntegerField(blank=True, null=True)
     marital_status = models.CharField(max_length=9,choices=STATUS,default="Unmarried")

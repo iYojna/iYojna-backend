@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from utils.db.update_schemes import main
 
+from .models import EnglishSchemeModel, GujSchemeModel
+
 # Create your views here.
 
 ls = ["agricultre", "cooperation", "education", "civil", "home", "administration", "mines", "labour", "tribal", "urban",
@@ -12,17 +14,15 @@ ls = ["agricultre", "cooperation", "education", "civil", "home", "administration
       "technology"]
 
 
-class SchemeView(views.APIView):
-
+class UpdateSchemeView(views.APIView):
     def get(self, request):
-        data = dict()
-        schemes = get_schemes()
-        test_scheme = list(schemes.values())[0]
-        scheme_data = get_scheme_data(test_scheme)
         main()
-        data["name"] = scheme_data["en"]["name"]
-        data["interest_rate"] = scheme_data["en"]["interest_rate"]
-        data["income_limit"] = scheme_data["en"]["income_limit"]
+        return Response({"message": "Updated Schemes"}, status=status.HTTP_200_OK)
+    
 
-        return Response(data, status=status.HTTP_200_OK)
-
+class SchemesView(views.APIView):
+    def get(self, request):
+        en_schemes = EnglishSchemeModel.objects.all()
+        gu_schemes = GujSchemeModel.objects.all()
+        
+        return Response({"en": en_schemes, "gu": gu_schemes})

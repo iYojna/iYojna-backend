@@ -16,7 +16,8 @@ def main():
         else:
             print(en_serializer.errors)
             print(gu_serializer.errors)
-            break
+        
+        print(scheme["en"]["name"])
 
 
 if __name__ == '__main__':
