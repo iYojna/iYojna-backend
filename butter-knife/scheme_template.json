@@ -1,13 +1,15 @@
 {
   "en": {
     "name": null,
+    "income_limit": null,
     "interest_rate": null,
-    "income_limit": null
+    "extra_data": {}
   },
   "gu": {
     "name": null,
-    "interest_rate": null,
     "income_limit": null,
-    "raw_html": null
-  }
+    "interest_rate": null,
+    "extra_data": {}
+  },
+  "link": null
 }
