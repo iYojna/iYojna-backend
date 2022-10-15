@@ -78,3 +78,4 @@ def _translate_data(data):
 schemes = get_schemes()
 test_scheme = list(schemes.values())[0]
 scheme_data = get_scheme_data(test_scheme)
+print(scheme_data)
