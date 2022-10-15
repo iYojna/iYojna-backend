@@ -7,8 +7,10 @@ def main():
     for scheme in schemes:
         en_serializer = EnglishSchemeModelSerializer(data=scheme["en"])
         gu_serializer = GujSchemeModelSerializer(data=scheme["gu"])
-
-        if en_serializer.is_valid() and gu_serializer.is_valid():
+        
+        en_valid = en_serializer.is_valid()
+        gu_valid = gu_serializer.is_valid()
+        if en_valid and gu_valid:
             en_serializer.save()
             gu_serializer.save()
         else:
