@@ -2,6 +2,7 @@ import json
 import os
 import re
 import time
+from csv import writer
 
 import httpcore
 from bs4 import BeautifulSoup as soup
@@ -91,6 +92,24 @@ def get_scheme_data(scheme_link):
     return scheme_data
 
 
+def generate_csv(scheme_link):
+    response = requests.get(scheme_link)
+
+    res_soup = soup(response.content, "html.parser")
+    scheme_div = res_soup.find("div", {"class": "parishisht"})
+
+    items = scheme_div.find_all("li")
+    items = [item.text for item in items]
+
+    with open('bullets.csv', 'w', newline="") as f:
+        writer_obj = writer(f)
+
+        writer_obj.writerow(["Source", "Translated"])
+        for item in items:
+            if item.strip():
+                writer_obj.writerow([item, _translate_data(item)])
+
+
 def _translate_data(data):
     translated_data = translator.translate(data, dest="en")
     return translated_data.text
@@ -99,4 +118,5 @@ def _translate_data(data):
 if __name__ == '__main__':
     schemes = get_schemes()
     test_scheme = list(schemes.values())[0]
-    scheme_data = get_scheme_data(test_scheme)
+    # scheme_data = get_scheme_data(test_scheme)
+    generate_csv(test_scheme)
