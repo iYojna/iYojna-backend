@@ -30,7 +30,7 @@ class RegisterView(generics.GenericAPIView):
         otp = random.randint(1000,9999)
         user = User.objects.get(username=user_data['username'])
         
-        # message_handle = MessageHandler(phone_number,otp).send_otp_on_phone()
+        message_handle = MessageHandler(phone_number,otp).send_otp_on_phone()
         user.username = user_data['phone_no']
         user.set_password("demopass")
         user.otp= otp
@@ -50,6 +50,23 @@ class VerifyOTP(views.APIView):
     def post(self,request):
         data= request.data
         user = User.objects.get(phone_no=data['phone_no'])
+        
+        a = user.otp
+        b= data['OTP']
+        
+        if a==b:
+           user.is_verified = True
+           user.save() 
+           return Response({'otp': 'Successfully verified'}, status=status.HTTP_200_OK)
+        
+        else:
+            return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
+
+class VerifyLoginOTP(views.APIView):
+    
+    def post(self,request):
+        data= request.data
+        user = User.objects.get(phone_no=data['username'])
         
         a = user.otp
         b= data['OTP']
