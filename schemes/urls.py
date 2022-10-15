@@ -4,5 +4,6 @@ from django.urls import path
 
 
 urlpatterns = [
-    path('get-schemes/',views.SchemeView.as_view(),name="get-schemes"),
+    path('update-schemes/',views.UpdateSchemeView.as_view(),name="update-schemes"),
+    path('get-schemes/',views.SchemesView.as_view(),name="get-schemes"),
 ]
