@@ -4,8 +4,10 @@ from butter_knife.main import get_schemes, get_scheme_data
 from rest_framework.response import Response
 from rest_framework import status
 from utils.db.update_schemes import main
+from utils.get_tags.get_tags import getTags
 
 from .models import EnglishSchemeModel, GujSchemeModel
+from .serializers import EnglishSchemeModelSerializer
 
 # Create your views here.
 
@@ -21,8 +23,44 @@ class UpdateSchemeView(views.APIView):
     
 
 class SchemesView(views.APIView):
+    queryset = EnglishSchemeModel.objects.all()
     def get(self, request):
-        en_schemes = EnglishSchemeModel.objects.all()
-        gu_schemes = GujSchemeModel.objects.all()
+        queryset = EnglishSchemeModel.objects.all()
+        serialzer = EnglishSchemeModelSerializer(queryset, many=True)
+        return Response(serialzer.data)
+    
+class UpdateSchemeTagsView(views.APIView):
+    def get(self,request):
+        schemes = EnglishSchemeModel.objects.all()
+        for x in schemes:
+            name = x.name
+            desc = x.desc
+            
+            ls = getTags(name)
+            ps = getTags(desc)
+            
+            js = ls+ps
+            x.tags = str(js)
+            x.save()
+            
+        return Response({"message": "Updated Tags"}, status=status.HTTP_200_OK)
+    
+
         
-        return Response({"en": en_schemes, "gu": gu_schemes})
+class RetTagSchemeView(views.APIView):
+    
+    def get(self,request):
+        tag = request.query_params.get('tag',None).lower()
+        schemes = EnglishSchemeModel.objects.all()
+        resp = dict()
+        for x in schemes:
+            strls = x.tags
+            strls = strls.split("'")
+            # print(strls)
+            for y in strls:
+                if y == str(tag):
+                    x_scheme = EnglishSchemeModel.objects.get(id=x.id)
+                    x_scheme_data = EnglishSchemeModelSerializer(x_scheme).data
+                    resp[x.id] = x_scheme_data
+            
+        return Response(resp, status=status.HTTP_200_OK)
