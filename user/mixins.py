@@ -1,8 +1,11 @@
 from email import message
 from twilio.rest import Client
+from decouple import Config, RepositoryEnv
+DOTENV_FILE = './api/.env'
+env_config = Config(RepositoryEnv(DOTENV_FILE))
 
-account_sid = "ACf9b47deca688d4b5a0bb2c0689cd2863"
-auth_token = "948602a4cc649d8b4ba02fc027374e64"
+account_sid = env_config.get("account_sid")
+auth_token = env_config.get("auth_token")
 twilio_phone = "+17472943310"
 
 
