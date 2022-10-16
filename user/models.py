@@ -66,4 +66,6 @@ class User(AbstractUser):
 
     @property
     def age(self):
+        if not self.dob:
+            return 0
         return int((datetime.date.today() - self.dob).days / 365.25)

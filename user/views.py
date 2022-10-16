@@ -82,3 +82,13 @@ class VerifyLoginOTP(views.APIView):
 
         else:
             return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RetUserTags(views.APIView):
+    def get(self, request):
+        user = User.objects.get(phone_no="+919174400406")
+        tags = user.tags
+        tags = tags.strip("[]").split(", ")
+        tags = list(map(lambda x: x.strip("'"), tags))
+
+        return Response(tags, status=status.HTTP_200_OK)
