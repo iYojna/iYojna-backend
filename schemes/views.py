@@ -1,3 +1,4 @@
+from typing import OrderedDict
 from django.shortcuts import render
 from rest_framework import views
 from butter_knife.main import get_schemes, get_scheme_data
@@ -72,3 +73,29 @@ class RetTagSchemeView(views.APIView):
             final_resp[scheme_id] = scheme_data
 
         return Response(final_resp, status=status.HTTP_200_OK)
+
+
+class RetQuerySchemeView(views.APIView):
+    def get(self, request):
+        query = request.query_params.get('query', None).lower()
+        query = query.split("&")
+        schemes = EnglishSchemeModel.objects.all()
+        resp = OrderedDict()
+
+        for quer in query:
+            for x in schemes:
+                strls = x.tags
+                strls = strls.split("'")
+                deno = len(strls)
+                num = 0
+                for y in strls:
+                    if y == str(quer):
+                        num = num + 1
+
+                if num > 0:
+                    percent = (num / deno) * 100
+                    x_scheme = EnglishSchemeModel.objects.get(id=x.id)
+                    x_scheme_data = EnglishSchemeModelSerializer(x_scheme).data
+                    resp[percent] = x_scheme_data
+
+        return Response(resp, status=status.HTTP_200_OK)
