@@ -24,7 +24,7 @@ def stem_words(inputStr):
 
 
 def getTags(inputStr):
-    tags = list(set(model.nlp(inputStr)))
+    tags = list(set(nlp(inputStr)))
     return tags
 
 
