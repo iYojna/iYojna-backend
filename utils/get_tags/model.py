@@ -10,14 +10,15 @@ def nlp(text):
            "માં", "ની", "હતાં", "તેવી", "થયો", "એવી", "થી", "થયું", "ત્યાં", "બની", "ગયો", "છતાં", "આપી",
            "રહે", "તેઓ", "પાસે", "તેમ", "ને", "તેને", "હું", "બાદ", "શકે", "જો", "અંગે", "રહી", "એમ", "તેના", "કરે",
            "થઇ", "સુધી", "જાય", "રૂા", "કોઈ", "ના", "હવે", "તેની", "સામે", "આવે", "બે", "થઈ", "ન", "જે", "આવી", "તા",
-           "પર", "હોય", "હતું", "એ", "કરી", "તે", "હતી", "માટે", "તો", "જ", "પણ", "કે", "આ", "અને", "છે"],
+           "પર", "હોય", "હતું", "એ", "કરી", "તે", "હતી", "માટે", "તો", "જ", "પણ", "કે", "આ", "અને", "છે"]
 
     nltk.download('punkt')
     
     from nltk.tokenize import word_tokenize
     
-    all_stopwords_gensim = STOPWORDS
-    STOPWORDS = STOPWORDS.union(duj)
+    all_stopwords_gensim = list(STOPWORDS)
+    all_stopwords_gensim.extend(duj)
+    STOPWORDS = set(all_stopwords_gensim)
     sw_list = {"not"}
     
     all_stopwords_gensim = STOPWORDS.difference(sw_list)
