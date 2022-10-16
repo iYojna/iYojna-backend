@@ -18,7 +18,7 @@ ls = ["agricultre", "cooperation", "education", "civil", "home", "administration
 
 
 def get_model_by_request(request):
-    if request.GET.get("lang") == "gu":
+    if request.headers.get("lang") == "gu":
         return GujSchemeModel
     else:
         return EnglishSchemeModel

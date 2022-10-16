@@ -28,6 +28,7 @@ def update_schemes():
 
 
 def is_eligible(scheme: EnglishSchemeModelSerializer.data, user):
+    return True
     user = User.objects.get(username="+919174400406")
     # user = RegisterSerializer(user).data
     # if not user.is_authenticated:
