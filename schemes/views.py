@@ -85,25 +85,27 @@ class RetTagSchemeView(views.APIView):
 
 class RetQuerySchemeView(views.APIView):
     def get(self, request):
-        query = request.query_params.get('query', None).lower()
-        query = query.split("&")
+        query = request.query_params.get('query', None)
+        if query is None:
+            return Response({"message": "Please provide a query"}, status=status.HTTP_400_BAD_REQUEST)
+        query = query.lower().split(",")
         schemes = EnglishSchemeModel.objects.all()
         resp = OrderedDict()
 
-        for quer in query:
-            for x in schemes:
-                strls = x.tags
-                strls = strls.split("'")
-                deno = len(strls)
-                num = 0
-                for y in strls:
-                    if y.lower() == str(quer):
-                        num = num + 1
+        for x in schemes:
+            strls = x.tags
+            strls = strls.split("'")
+            strls = list(map(str.lower, strls))
 
-                if num > 0:
-                    percent = (num / deno) * 100
-                    x_scheme = EnglishSchemeModel.objects.get(id=x.id)
-                    x_scheme_data = EnglishSchemeModelSerializer(x_scheme).data
-                    resp[percent] = x_scheme_data
+            num = 0
+            for quer in query:
+                if quer in strls:
+                    num += 1
+            if num != 0:
+                x_scheme_data = EnglishSchemeModelSerializer(x).data
+                if resp.get(num / len(query)):
+                    resp[num / len(query)].append(x_scheme_data)
+                else:
+                    resp[num / len(query)] = [x_scheme_data]
 
         return Response(resp, status=status.HTTP_200_OK)
