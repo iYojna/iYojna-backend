@@ -97,7 +97,7 @@ class RetQuerySchemeView(views.APIView):
                 deno = len(strls)
                 num = 0
                 for y in strls:
-                    if y == str(quer):
+                    if y.lower() == str(quer):
                         num = num + 1
 
                 if num > 0:
