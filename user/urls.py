@@ -9,4 +9,5 @@ urlpatterns = [
     path('login/', views.LoginAPIView.as_view(), name="login"),
     path('verify-otp/', views.VerifyOTP.as_view(), name='token_refresh'),
     path('verifylogin-otp/', views.VerifyLoginOTP.as_view(), name='token_refresh'),
+    path('user-add-tags/', views.TagView.as_view(), name='tags-add'),
 ]
