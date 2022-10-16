@@ -3,6 +3,13 @@ from django.db import models
 
 # Create your models here.
 class EnglishSchemeModel(models.Model):
+    EDU_TYPES = (
+        ('Graduate', 3),
+        ('Under Graduate', 2),
+        ('Schooling', 1),
+        ('Not Applicable', 0),
+    )
+
     name = models.CharField(max_length=500, null=False, blank=False)
     desc = models.TextField(null=True, blank=True)
     income_limit = models.TextField(null=True, blank=True)
@@ -15,8 +22,8 @@ class EnglishSchemeModel(models.Model):
     max_age = models.IntegerField(null=True, blank=True)
     min_inc = models.IntegerField(null=True, blank=True)
     max_inc = models.IntegerField(null=True, blank=True)
-    eduaction = models.CharField(max_length=255, null=True, blank=True)
-    occuptaion = models.CharField(max_length=255, null=True, blank=True)
+    educational_qualifications = models.CharField(max_length=15, choices=EDU_TYPES, null=True, blank=True)
+    occupation = models.CharField(max_length=255, null=True, blank=True)
     disability = models.CharField(max_length=255, null=True, blank=True)
     tags = models.TextField(null=True, blank=True)
 
@@ -24,11 +31,11 @@ class EnglishSchemeModel(models.Model):
 # class EnglishTagModel(models.Model):
 #     name = models.CharField(max_length=255)
 #     scheme = models.ManyToManyField(EnglishSchemeModel)
-    
+
 # class GujTagModel(models.Model):
 #     name = models.CharField(max_length=255)
 #     scheme = models.ManyToManyField(EnglishSchemeModel)
-    
+
 
 class GujSchemeModel(models.Model):
     name = models.CharField(max_length=500, null=False, blank=False)

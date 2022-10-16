@@ -281,3 +281,5 @@ db.sqlite3
 
 .env
 butter_knife/*.csv
+.idea
+.idea/iYojna-backend.iml
