@@ -20,7 +20,7 @@ def stem_words(inputStr):
 
 
 def getTags(inputStr):
-    tags = model.nlp(inputStr)
+    tags = nlp(inputStr)
     return tags
 
 
