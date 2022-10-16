@@ -38,10 +38,10 @@ class UpdateSchemeView(views.APIView):
 
 
 class SchemesView(views.APIView):
-    queryset = EnglishSchemeModel.objects.all()
+    queryset = EnglishSchemeModel.objects.all().filter(desc__isnull=False)
 
     def get(self, request):
-        queryset = get_model_by_request(request).objects.all()
+        queryset = get_model_by_request(request).objects.all().filter(desc__isnull=False)
         serializer = get_serializer_by_request(request)(queryset, many=True)
         return Response(serializer.data)
 
@@ -74,7 +74,7 @@ class RetTagSchemeView(views.APIView):
         if tag is None:
             return Response({"message": "Please provide a tag"}, status=status.HTTP_400_BAD_REQUEST)
         tag = request.query_params.get('tag', None).lower()
-        schemes = get_model_by_request(request).objects.all()
+        schemes = get_model_by_request(request).objects.all().filter(desc__isnull=False)
         resp = {}
         final_resp = {}
         for x in schemes:
