@@ -21,20 +21,25 @@ def update_schemes():
 
 
 def is_eligible(scheme: EnglishSchemeModelSerializer.data, user):
-    if scheme.max_inc:
-        if user.income > scheme.max_inc:
-            return False
-    if scheme.min_age:
-        if user.age < scheme.min_age:
-            return False
-    if scheme.max_age:
-        if user.age > scheme.max_age:
-            return False
-    if scheme.educational_qualifications:
-        if user.education < scheme.educational_qualifications:
-            return False
-
-    return True
+    if user.is_authenticated:
+        if scheme.get("max_inc"):
+            if user.income > scheme.max_inc:
+                return False
+        if scheme.get("min_inc"):
+            if user.income < scheme.min_inc:
+                return False
+        if scheme.get("min_age"):
+            if user.age < scheme.min_age:
+                return False
+        if scheme.get("max_age"):
+            if user.age > scheme.max_age:
+                return False
+        if scheme.get("educational_qualifications"):
+            if user.education < scheme.educational_qualifications:
+                return False
+        return True
+    else:
+        return False
 
 
 if __name__ == '__main__':

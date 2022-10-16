@@ -171,6 +171,3 @@ SIMPLE_JWT = {
 
 AUTH_USER_MODEL = 'user.User'
 django_heroku.settings(locals())
-
-DATE_INPUT_FORMATS = ['%d/%m/%Y']
-DATE_FORMAT = '%d/%m/%Y'

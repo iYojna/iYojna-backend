@@ -20,21 +20,32 @@ class User(AbstractUser):
     )
 
     EDU_TYPES = (
-        ('Graduate', 3),
-        ('Under Graduate', 2),
-        ('Schooling', 1),
-        ('Not Applicable', 0),
+        ('Below 10th', 'Below 10th'),
+        ('10th', '10th'),
+        ('12th', '12th'),
+        ('Graduate', 'Graduate'),
+        ('Post Graduate', 'Post Graduate'),
+        ('Doctorate', 'Doctorate'),
     )
+
+    ED_MAP = {
+        'Below 10th': 0,
+        '10th': 1,
+        '12th': 2,
+        'Graduate': 3,
+        'Post Graduate': 4,
+        'Doctorate': 5,
+    }
 
     first_name = models.CharField(max_length=255, null=True, blank=False)
     last_name = models.CharField(max_length=255, null=True, blank=False)
     otp = models.CharField(max_length=100, null=True, blank=False)
-    dob = models.DateField(auto_now_add=True)
+    dob = models.DateField(default=datetime.date.today)
     gender = models.CharField(max_length=9, choices=TYPE, default="Female")
     income = models.IntegerField(blank=True, null=True)
     marital_status = models.CharField(max_length=9, choices=STATUS, default="Unmarried")
     caste = models.CharField(max_length=255, blank=True, null=True)
-    educational_qualifications = models.CharField(max_length=15, choices=EDU_TYPES, default="Graduate")
+    education = models.CharField(max_length=20, choices=EDU_TYPES, default="Below 10th")
     district = models.CharField(max_length=255, blank=True, null=True)
     phone_no = models.CharField(max_length=15, blank=True)
     tags = models.TextField(null=True, blank=True)
@@ -48,3 +59,11 @@ class User(AbstractUser):
             'refresh': str(refresh),
             'access': str(refresh.access_token)
         }
+
+    @property
+    def educational_qualifications(self):
+        return self.ED_MAP[self.education]
+
+    @property
+    def age(self):
+        return int((datetime.date.today() - self.dob).days / 365.25)

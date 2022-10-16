@@ -40,17 +40,25 @@ class UpdateSchemeTagsView(views.APIView):
             desc = x.desc
 
             ls = getTags(name)
-            ps = getTags(desc)
+            if desc:
+                ps = getTags(desc)
+            else:
+                ps = []
 
             js = ls + ps
             x.tags = str(js)
             x.save()
+
+            print(x.name)
 
         return Response({"message": "Updated Tags"}, status=status.HTTP_200_OK)
 
 
 class RetTagSchemeView(views.APIView):
     def get(self, request):
+        tag = request.query_params.get("tag", None)
+        if tag is None:
+            return Response({"message": "Please provide a tag"}, status=status.HTTP_400_BAD_REQUEST)
         tag = request.query_params.get('tag', None).lower()
         schemes = EnglishSchemeModel.objects.all()
         resp = {}

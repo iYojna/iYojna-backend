@@ -15,9 +15,7 @@ def nlp(text):
     
     all_stopwords_gensim = STOPWORDS.difference(sw_list)
 
-    
-    # text = "how i am elidgible for kalash chit fund scheme"
-    
+    # text = "how i am eligible for kalash chit fund scheme"
     text_tokens = word_tokenize(text)
     
     tokens_without_sw = [word for word in text_tokens if not word in all_stopwords_gensim]
