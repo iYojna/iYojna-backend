@@ -10,4 +10,5 @@ urlpatterns = [
     path('verify-otp/', views.VerifyOTP.as_view(), name='token_refresh'),
     path('verifylogin-otp/', views.VerifyLoginOTP.as_view(), name='token_refresh'),
     path('get-tags/', views.RetUserTags.as_view(), name="get-tags"),
+    path('user-add-tags/', views.TagView.as_view(), name='tags-add'),
 ]

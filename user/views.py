@@ -8,6 +8,10 @@ from .mixins import *
 from .models import User
 from .serializers import RegisterSerializer, LoginSerializer
 
+ls = ["agricultre", "cooperation", "education", "civil", "home", "administration", "mines", "labour", "tribal", "urban",
+      "women", "child", "ITC", "BSF", "NTPC", "Toy", "innovation", "collector", "DDO", "municipal", "science",
+      "technology"]
+
 
 # Create your views here.
 class RegisterView(generics.GenericAPIView):
@@ -37,7 +41,16 @@ class RegisterView(generics.GenericAPIView):
         user.save()
         return Response(user_data, status=status.HTTP_201_CREATED)
 
-
+class TagView(views.APIView):
+    
+   def post(self, request, *args, **kwargs):
+        username = "+919174400406"
+        tags_data = request.data
+        user = User.objects.get(username=username)
+        user.tags = tags_data['user_tags']
+        user.save()
+        return Response(tags_data, status=status.HTTP_200_OK)
+        
 class LoginAPIView(generics.GenericAPIView):
     serializer_class = LoginSerializer
 
